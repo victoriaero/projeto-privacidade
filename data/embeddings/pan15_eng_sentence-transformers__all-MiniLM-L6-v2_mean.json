@@ -1,0 +1,16 @@
+{
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "aggregation": "mean",
+  "document_separator": " <DOC_SEP> ",
+  "train_csv": "/scratch/victoria.estanislau/projeto-privacidade/data/processed/train.csv",
+  "test_csv": "/scratch/victoria.estanislau/projeto-privacidade/data/processed/test.csv",
+  "output_path": "/scratch/victoria.estanislau/projeto-privacidade/data/embeddings/pan15_eng_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
+  "x_train_shape": [
+    152,
+    384
+  ],
+  "x_test_shape": [
+    142,
+    384
+  ]
+}
