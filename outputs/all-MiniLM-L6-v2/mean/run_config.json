@@ -2,12 +2,12 @@
   "model_name": "sentence-transformers/all-MiniLM-L6-v2",
   "aggregation": "mean",
   "batch_size": 32,
-  "device": "cuda",
-  "train_csv": "/scratch/victoria.estanislau/projeto-privacidade/data/processed/train.csv",
-  "test_csv": "/scratch/victoria.estanislau/projeto-privacidade/data/processed/test.csv",
-  "embeddings_dir": "/scratch/victoria.estanislau/projeto-privacidade/data/embeddings",
-  "embeddings_path": "/scratch/victoria.estanislau/projeto-privacidade/data/embeddings/pan15_eng_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
-  "results_dir": "/scratch/victoria.estanislau/projeto-privacidade/outputs/all-MiniLM-L6-v2/mean",
+  "device": null,
+  "train_csv": "/home/victoriaero/Documents/projeto-privacidade/data/processed/train.csv",
+  "test_csv": "/home/victoriaero/Documents/projeto-privacidade/data/processed/test.csv",
+  "embeddings_dir": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings",
+  "embeddings_path": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings/pan15_eng_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
+  "results_dir": "/home/victoriaero/Documents/projeto-privacidade/outputs/all-MiniLM-L6-v2/mean",
   "seeds": [
     13,
     21,
@@ -22,6 +22,15 @@
     0.75,
     1.0
   ],
+  "utility_neighbor_ks": [
+    5,
+    10,
+    20
+  ],
+  "skip_summary": false,
+  "privacy": {
+    "mode": "none"
+  },
   "classifiers": [
     "logistic_regression",
     "random_forest",
