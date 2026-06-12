@@ -6,6 +6,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
+from xgboost import XGBClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, classification_report, confusion_matrix, f1_score, precision_score, recall_score
@@ -40,6 +41,7 @@ def make_classifiers(seed: int) -> dict[str, object]:
         "logistic_regression": Pipeline(steps=[("scaler", StandardScaler()), ("classifier", LogisticRegression(class_weight="balanced", max_iter=2000, random_state=seed))]),
         "random_forest": RandomForestClassifier(n_estimators=500, class_weight="balanced", random_state=seed, n_jobs=-1),
         "hist_gradient_boosting": HistGradientBoostingClassifier(learning_rate=0.05, max_iter=300, l2_regularization=1e-3, early_stopping=True, validation_fraction=0.2, n_iter_no_change=20, random_state=seed),
+        "xgboost": XGBClassifier(n_estimators=300, learning_rate=0.05, max_depth=4, subsample=0.8, colsample_bytree=0.8, reg_lambda=1.0, eval_metric="mlogloss", tree_method="hist", random_state=seed, n_jobs=-1),
         "mlp": Pipeline(steps=[("scaler", StandardScaler()), ("classifier", MLPClassifier(hidden_layer_sizes=(64,), activation="relu", alpha=1e-3, max_iter=1000, early_stopping=True, validation_fraction=0.2, n_iter_no_change=20, random_state=seed))]),
     }
 

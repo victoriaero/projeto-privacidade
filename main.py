@@ -70,6 +70,7 @@ def write_run_config(output_dir: Path, args: argparse.Namespace, embeddings_path
             "logistic_regression",
             "random_forest",
             "hist_gradient_boosting",
+            "xgboost",
             "mlp",
         ],
         "tasks": ["gender", "age"],

@@ -35,6 +35,7 @@
     "logistic_regression",
     "random_forest",
     "hist_gradient_boosting",
+    "xgboost",
     "mlp"
   ],
   "tasks": [
