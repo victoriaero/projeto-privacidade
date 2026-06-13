@@ -11,12 +11,14 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 EMBEDDINGS_DIR = PROJECT_ROOT / "data" / "embeddings"
-DOCUMENT_SEPARATOR = " <DOC_SEP> "
+DOCUMENT_SEPARATOR = "\n<DOC_SEP>\n"
+LEGACY_DOCUMENT_SEPARATOR = "  "
 DEFAULT_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate cached author embeddings for PAN15 processed CSVs.")
+    parser.add_argument("--dataset-name", default="pan15_eng", help="Dataset prefix used in the embedding cache filename.")
     parser.add_argument("--model-name", default=DEFAULT_MODEL_NAME)
     parser.add_argument("--aggregation", choices=["mean", "mean_std"], default="mean", help="How to aggregate document embeddings into one author vector.")
     parser.add_argument("--batch-size", type=int, default=32)
@@ -28,9 +30,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def cache_name(model_name: str, aggregation: str) -> str:
+def cache_name(model_name: str, aggregation: str, dataset_name: str = "pan15_eng") -> str:
     safe_model_name = model_name.replace("/", "__")
-    return f"pan15_eng_{safe_model_name}_{aggregation}.npz"
+    safe_dataset_name = dataset_name.replace("/", "_").replace(" ", "_")
+    return f"{safe_dataset_name}_{safe_model_name}_{aggregation}.npz"
 
 
 def short_model_name(model_name: str) -> str:
@@ -38,7 +41,13 @@ def short_model_name(model_name: str) -> str:
 
 
 def split_documents(text: str) -> list[str]:
-    documents = [document.strip() for document in str(text).split(DOCUMENT_SEPARATOR) if document.strip()]
+    text = str(text)
+
+    if DOCUMENT_SEPARATOR in text:
+        documents = [ document.strip() for document in text.split(DOCUMENT_SEPARATOR) if document.strip()]
+        return documents
+
+    documents = [ document.strip() for document in text.split(LEGACY_DOCUMENT_SEPARATOR) if document.strip()]
     return documents
 
 
@@ -90,7 +99,7 @@ def read_processed_csv(path: Path) -> pd.DataFrame:
 
 def generate_embeddings(args: argparse.Namespace) -> Path:
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = args.output_dir / cache_name(args.model_name, args.aggregation)
+    output_path = args.output_dir / cache_name(args.model_name, args.aggregation, args.dataset_name)
     metadata_path = output_path.with_suffix(".json")
 
     if output_path.exists() and not args.overwrite:
@@ -124,6 +133,7 @@ def generate_embeddings(args: argparse.Namespace) -> Path:
     )
 
     metadata = {
+        "dataset_name": args.dataset_name,
         "model_name": args.model_name,
         "aggregation": args.aggregation,
         "document_separator": DOCUMENT_SEPARATOR,

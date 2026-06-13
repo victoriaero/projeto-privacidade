@@ -1,1 +1,3 @@
 .venv
+data/raw/blog_authorship/*
+data/processed/blog_authorship/

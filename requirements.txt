@@ -4,3 +4,4 @@ scikit-learn==1.4.2
 sentence-transformers
 diffprivlib
 xgboost
+kaggle

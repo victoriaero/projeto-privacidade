@@ -1,0 +1,18 @@
+{
+  "source_embeddings_path": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings/blog_authorship_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
+  "output_path": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings/blog_authorship_sentence-transformers__all-MiniLM-L6-v2_mean_dp_eps20_delta1e-05_sens1_seed2026.npz",
+  "privacy_enabled": true,
+  "mechanism": "diffprivlib.mechanisms.GaussianAnalytic",
+  "epsilon": 20.0,
+  "delta": 1e-05,
+  "sensitivity": 1.0,
+  "seed": 2026,
+  "x_train_shape": [
+    13995,
+    384
+  ],
+  "x_test_shape": [
+    3499,
+    384
+  ]
+}

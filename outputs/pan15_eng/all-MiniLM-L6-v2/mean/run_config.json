@@ -1,0 +1,46 @@
+{
+  "dataset_name": "pan15_eng",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "aggregation": "mean",
+  "batch_size": 64,
+  "device": null,
+  "train_csv": "datasets/pan15_eng/train.csv",
+  "test_csv": "datasets/pan15_eng/test.csv",
+  "embeddings_dir": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings",
+  "embeddings_path": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings/pan15_eng_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
+  "results_dir": "/home/victoriaero/Documents/projeto-privacidade/outputs/pan15_eng/all-MiniLM-L6-v2/mean",
+  "seeds": [
+    13,
+    21,
+    34,
+    55,
+    89
+  ],
+  "train_fractions": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "utility_neighbor_ks": [
+    5,
+    10,
+    20
+  ],
+  "skip_summary": false,
+  "privacy": {
+    "mode": "none"
+  },
+  "classifiers": [
+    "logistic_regression",
+    "random_forest",
+    "hist_gradient_boosting",
+    "xgboost",
+    "mlp"
+  ],
+  "tasks": [
+    "gender",
+    "age"
+  ]
+}

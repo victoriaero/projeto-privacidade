@@ -12,9 +12,17 @@ from src.summarize_results import summarize_results
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
+def safe_name(value: str) -> str:
+    return (
+        value.strip()
+        .replace("/", "_")
+        .replace("\\", "_")
+        .replace(" ", "_")
+    )
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=("Run the PAN15 privacy attack pipeline: generate cached author embeddings, optionally privatize them, then train and evaluate attacker classifiers."))
+    parser.add_argument("--dataset-name", default="pan15_eng", help="Dataset prefix used in cache and output naming.")
     parser.add_argument("--model-name", default=DEFAULT_MODEL_NAME)
     parser.add_argument("--aggregation", choices=["mean", "mean_std"], default="mean", help="How to aggregate document embeddings into one author vector.")
     parser.add_argument("--batch-size", type=int, default=32)
@@ -38,10 +46,11 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def resolve_results_dir(results_dir: Path | None, model_name: str, aggregation: str) -> Path:
+def resolve_results_dir(results_dir: Path | None, dataset_name: str, model_name: str, aggregation: str) -> Path:
     if results_dir is not None:
         return results_dir
-    return RESULTS_DIR / short_model_name(model_name) / aggregation
+
+    return RESULTS_DIR / safe_name(dataset_name) / short_model_name(model_name) / aggregation
 
 
 def resolve_dp_results_dir(base_results_dir: Path, epsilon: float) -> Path:
@@ -52,6 +61,7 @@ def resolve_dp_results_dir(base_results_dir: Path, epsilon: float) -> Path:
 def write_run_config(output_dir: Path, args: argparse.Namespace, embeddings_path: Path, privacy_config: dict[str, object] | None = None) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     config = {
+        "dataset_name": args.dataset_name,
         "model_name": args.model_name,
         "aggregation": args.aggregation,
         "batch_size": args.batch_size,
@@ -97,7 +107,7 @@ def run_attacks_for_embeddings(args: argparse.Namespace, embeddings_path: Path, 
 
 def main() -> None:
     args = parse_args()
-    results_dir = resolve_results_dir(args.results_dir, args.model_name, args.aggregation)
+    results_dir = resolve_results_dir(args.results_dir, args.dataset_name, args.model_name, args.aggregation)
 
     embedding_args = argparse.Namespace(
         model_name=args.model_name,
@@ -108,11 +118,12 @@ def main() -> None:
         test_csv=args.test_csv,
         output_dir=args.embeddings_dir,
         overwrite=args.overwrite_embeddings,
+        dataset_name=args.dataset_name,
     )
 
     embeddings_path = generate_embeddings(embedding_args)
 
-    expected_embeddings_path = args.embeddings_dir / cache_name(args.model_name, args.aggregation)
+    expected_embeddings_path = args.embeddings_dir / cache_name(args.model_name, args.aggregation, args.dataset_name)
     if embeddings_path != expected_embeddings_path:
         raise RuntimeError(
             f"Unexpected embeddings path: {embeddings_path}. "

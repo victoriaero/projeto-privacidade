@@ -1,0 +1,17 @@
+{
+  "dataset_name": "blog_authorship",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "aggregation": "mean",
+  "document_separator": "\n<DOC_SEP>\n",
+  "train_csv": "data/processed/blog_authorship/train.csv",
+  "test_csv": "data/processed/blog_authorship/test.csv",
+  "output_path": "/home/victoriaero/Documents/projeto-privacidade/data/embeddings/blog_authorship_sentence-transformers__all-MiniLM-L6-v2_mean.npz",
+  "x_train_shape": [
+    13995,
+    384
+  ],
+  "x_test_shape": [
+    3499,
+    384
+  ]
+}
